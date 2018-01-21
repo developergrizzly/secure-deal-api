@@ -26,8 +26,20 @@ export default {
   // POST /api/auth/login
   login: {
     body: {
-      username: Joi.string().required(),
+      emailAddress: Joi.string().email().required(),
       password: Joi.string().required()
+    }
+  },
+
+  // POST /api/auth/register
+  register: {
+    body: {
+      firstName: Joi.string(),
+      lastName: Joi.string(),
+      emailAddress: Joi.string().email(),
+      mobileNumber: Joi.string(),
+      password: Joi.string(),
+      loginType: Joi.string().required()
     }
   }
 };

@@ -2,6 +2,8 @@ import jwt from 'jsonwebtoken';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import config from '../../config/config';
+import User from "../models/user.model";
+import bcrypt from 'bcrypt-nodejs';
 
 // sample user, used for authentication
 const user = {
@@ -17,34 +19,66 @@ const user = {
  * @returns {*}
  */
 function login(req, res, next) {
-  // Ideally you'll fetch this from the db
-  // Idea here was to show how jwt works with simplicity
-  if (req.body.username === user.username && req.body.password === user.password) {
-    const token = jwt.sign({
-      username: user.username
-    }, config.jwtSecret);
-    return res.json({
-      token,
-      username: user.username
-    });
-  }
+  let loginCredentials= {
+    emailAddress: req.body.emailAddress,
+    password: req.body.password
+  };
 
-  const err = new APIError('Authentication error', httpStatus.UNAUTHORIZED, true);
-  return next(err);
+  User.findOne({
+    emailAddress: loginCredentials.emailAddress
+  }).exec()
+    .then((user) => {
+      console.log(user);
+      if(!user) {
+        return next(new APIError('No user found', httpStatus.UNAUTHORIZED, true));
+      }
+      if(!bcrypt.compareSync(loginCredentials.password, user.password)) {
+        return next(new APIError('Wrong password', httpStatus.UNAUTHORIZED, true));
+      }
+      let token = jwt.sign(user, config.jwtSecret);
+      return res.json({
+        token
+      });
+    });
+}
+
+function loginWithFacebook(req, res, next) {
+
+}
+
+function loginWithGoogle(req, res, next) {
+
 }
 
 /**
- * This is a protected route. Will return random number only if jwt token is provided in header.
- * @param req
- * @param res
- * @returns {*}
+ * Create new user
+ * @property {string} req.body.username - The username of user.
+ * @property {string} req.body.mobileNumber - The mobileNumber of user.
+ * @returns {User}
  */
-function getRandomNumber(req, res) {
-  // req.user is assigned by jwt middleware if valid token is provided
-  return res.json({
-    user: req.user,
-    num: Math.random() * 100
+function register(req, res, next) {
+
+  const user = new User({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    emailAddress: req.body.emailAddress,
+    password: bcrypt.hashSync(req.body.password, null, null),
+    mobileNumber: req.body.mobileNumber,
+    loginType: req.body.loginType
   });
+
+  User.count({
+    emailAddress: req.body.emailAddress
+  }).exec()
+    .then((numberOfUser) => {
+      if(numberOfUser > 0) {
+        return next(new APIError('Email address already exists', httpStatus.CONFLICT, true))
+      } else {
+        user.save()
+          .then(savedUser => res.json(savedUser))
+          .catch(e => next(e));
+      }
+  })
 }
 
-export default { login, getRandomNumber };
+export default { login, loginWithFacebook, loginWithGoogle, register };
