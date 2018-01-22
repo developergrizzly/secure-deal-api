@@ -5,12 +5,6 @@ import config from '../../config/config';
 import User from "../models/user.model";
 import bcrypt from 'bcrypt-nodejs';
 
-// sample user, used for authentication
-const user = {
-  username: 'react',
-  password: 'express'
-};
-
 /**
  * Returns jwt token if valid username and password is provided
  * @param req
@@ -27,27 +21,85 @@ function login(req, res, next) {
   User.findOne({
     emailAddress: loginCredentials.emailAddress
   }).exec()
-    .then((user) => {
-      console.log(user);
-      if(!user) {
-        return next(new APIError('No user found', httpStatus.UNAUTHORIZED, true));
-      }
-      if(!bcrypt.compareSync(loginCredentials.password, user.password)) {
-        return next(new APIError('Wrong password', httpStatus.UNAUTHORIZED, true));
-      }
-      let token = jwt.sign(user, config.jwtSecret);
-      return res.json({
-        token
-      });
+  .then((user) => {
+    if(!user) {
+      return next(new APIError('No user found', httpStatus.UNAUTHORIZED, true));
+    }
+    if(!bcrypt.compareSync(loginCredentials.password, user.password)) {
+      return next(new APIError('Wrong password', httpStatus.UNAUTHORIZED, true));
+    }
+    let token = jwt.sign(user, config.jwtSecret);
+    return res.json({
+      message: "Login successfully",
+      token: token
     });
+  });
 }
 
 function loginWithFacebook(req, res, next) {
-
+  const user = new User({
+    socialMediaId: req.body.socialMediaId,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    emailAddress: req.body.emailAddress,
+    profileImageURL: req.body.profileImageURL,
+    loginType: req.body.loginType
+  });
+  User.findOne({
+    socialMediaId: user.socialMediaId
+  }).exec()
+  .then((foundUser) => {
+    if(foundUser) {
+      let token = jwt.sign(foundUser, config.jwtSecret);
+      return res.json({
+        message: "Login successfully",
+        token: token
+      });
+    } else {
+      user.save()
+      .then((savedUser) => {
+        let token = jwt.sign(savedUser, config.jwtSecret);
+        return res.json({
+          message: "Login successfully",
+          token: token
+        });
+      })
+    }
+  })
+  .catch(e => next(e));
 }
 
 function loginWithGoogle(req, res, next) {
-
+  const user = new User({
+    socialMediaId: req.body.socialMediaId,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    emailAddress: req.body.emailAddress,
+    profileImageURL: req.body.profileImageURL,
+    loginType: req.body.loginType
+  });
+  User.findOne({
+    socialMediaId: user.socialMediaId
+  }).exec()
+    .then((foundUser) => {
+      if(foundUser) {
+        let token = jwt.sign(foundUser, config.jwtSecret);
+        return res.json({
+          message: "Login successfully",
+          token: token
+        });
+      } else {
+        user.save()
+          .then((savedUser) => {
+            let token = jwt.sign(savedUser, config.jwtSecret);
+            return res.json({
+              message: "Login successfully",
+              token: token
+            });
+          })
+      }
+    })
+    .catch(e => next(e));
 }
 
 /**
@@ -71,14 +123,14 @@ function register(req, res, next) {
     emailAddress: req.body.emailAddress
   }).exec()
     .then((numberOfUser) => {
-      if(numberOfUser > 0) {
-        return next(new APIError('Email address already exists', httpStatus.CONFLICT, true))
-      } else {
-        user.save()
-          .then(savedUser => res.json(savedUser))
-          .catch(e => next(e));
-      }
-  })
+    if(numberOfUser > 0) {
+      return next(new APIError('Email address already exists', httpStatus.CONFLICT, true))
+    } else {
+      user.save()
+        .then(savedUser => res.json(savedUser))
+        .catch(e => next(e));
+    }
+  }).catch(e => next(e));
 }
 
 export default { login, loginWithFacebook, loginWithGoogle, register };

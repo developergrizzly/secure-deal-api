@@ -1,5 +1,6 @@
 import express from 'express';
 import authRoutes from './auth.route';
+import countryRoutes from './country.route';
 
 const router = express.Router();
 
@@ -10,5 +11,8 @@ router.get('/health-check', (req, res) =>
 
 // mount auth routes at /auth
 router.use('/auth', authRoutes);
+
+// mount auth routes at /country
+router.use('/country', countryRoutes);
 
 export default router;

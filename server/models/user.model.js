@@ -2,7 +2,7 @@ import Promise from 'bluebird';
 import mongoose from 'mongoose';
 import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
-import enums from '../helpers/Enums'
+import enums from '../constant/Enums'
 import common from '../helpers/Common';
 
 /**
@@ -10,19 +10,24 @@ import common from '../helpers/Common';
  */
 const UserSchema = new mongoose.Schema({
   firstName: {
-    type: String
+    type: String,
+    default: ''
   },
   lastName: {
-    type: String
+    type: String,
+    default: ''
   },
   emailAddress: {
-    type: String
+    type: String,
+    default: ''
   },
   password: {
-    type: String
+    type: String,
+    default: ''
   },
   mobileNumber: {
-    type: String
+    type: String,
+    default: ''
   },
   isProfileCompleted: {
     type: Boolean,
@@ -37,8 +42,13 @@ const UserSchema = new mongoose.Schema({
     enum: enums.REGISTER_TYPE,
     required: true
   },
+  socialMediaId: {
+    type: String,
+    default: null
+  },
   profileImageURL: {
-    type: String
+    type: String,
+    default: ''
   },
   createdAt: {
     type: Date,
