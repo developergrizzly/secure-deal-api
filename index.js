@@ -5,6 +5,9 @@ import util from 'util';
 import config from './config/config';
 import app from './config/express';
 
+// set global variable to access value all over the application
+global.__basedir = __dirname;
+
 const debug = require('debug')('express-mongoose-es6-rest-api:index');
 
 // make bluebird default Promise
