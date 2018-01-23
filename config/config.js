@@ -21,7 +21,13 @@ const envVarsSchema = Joi.object({
   MONGO_HOST: Joi.string().required()
     .description('Mongo DB host url'),
   MONGO_PORT: Joi.number()
-    .default(27017)
+    .default(27017),
+  FTP_HOST: Joi.string().required(),
+  FTP_PORT: Joi.number()
+    .default(21),
+  FTP_USERNAME: Joi.string().required(),
+  FTP_PASSWORD: Joi.string().required(),
+  FTP_USER_PROFILE_PIC_PATH: Joi.string().required()
 }).unknown()
   .required();
 
@@ -38,6 +44,15 @@ const config = {
   mongo: {
     host: envVars.MONGO_HOST,
     port: envVars.MONGO_PORT
+  },
+  ftp: {
+    host: envVars.FTP_HOST,
+    port: envVars.FTP_PORT,
+    user: envVars.FTP_USERNAME,
+    password: envVars.FTP_PASSWORD
+  },
+  ftpPath: {
+    userProfileImage: envVars.FTP_USER_PROFILE_PIC_PATH
   }
 };
 

@@ -3,12 +3,6 @@ import userRoutes from './user.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
-router.use('/', (req, res, next) => {
-    console.log(req.user);
-    next();
-  }
-);
-
 /** GET /health-check - Check service health */
 router.get('/health-check', (req, res) =>
   res.send('OK')

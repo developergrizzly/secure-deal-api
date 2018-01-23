@@ -20,8 +20,11 @@ router.route('/:userId')
   .put(validate(paramValidation.updateUser), userCtrl.update)
 
   /** DELETE /api/users/:userId - Delete user */
-  .delete(userCtrl.remove);
+  .delete(userCtrl.remove)
 
+  /** POST /api/users/:userId - Upload user profile image */
+  .post(userCtrl.uploadUserProfileImage)
+;
 /** Load user when API with userId route parameter is hit */
 router.param('userId', userCtrl.load);
 

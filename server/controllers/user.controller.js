@@ -1,4 +1,7 @@
 import User from '../models/user.model';
+import fileManger from '../helpers/FileManager';
+import config from '../../config/config';
+import formidable from 'formidable';
 
 /**
  * Load user and append to req.
@@ -80,4 +83,20 @@ function remove(req, res, next) {
     .catch(e => next(e));
 }
 
-export default { load, get, create, update, list, remove };
+function uploadUserProfileImage(req, res, next) {
+  var form = new formidable.IncomingForm();
+  form.parse(req, function (err, fields, files) {
+    let sourceFilename= `${files.file.path}\\${files.file.name}`,
+      fileExtension = files.file.name.split('.').pop();
+    let destinationFileName=`${config.ftpPath.userProfileImage}/${req.params.userId}.${fileExtension}`;
+    console.log(sourceFilename);
+    console.log(destinationFileName);
+    fileManger.upload(sourceFilename, destinationFileName)
+      .then(dirList =>
+        res.json(dirList)
+      ).catch(e => next(e));
+  });
+
+}
+
+export default { load, get, create, update, list, remove, uploadUserProfileImage };
