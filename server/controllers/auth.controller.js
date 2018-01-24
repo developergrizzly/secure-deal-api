@@ -109,7 +109,6 @@ function loginWithGoogle(req, res, next) {
  * @returns {User}
  */
 function register(req, res, next) {
-
   const user = new User({
     firstName: req.body.firstName,
     lastName: req.body.lastName,

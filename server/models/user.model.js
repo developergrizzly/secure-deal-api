@@ -4,6 +4,7 @@ import httpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 import enums from '../constant/Enums'
 import common from '../helpers/Common';
+import config from "../../config/config";
 
 /**
  * User Schema
@@ -46,14 +47,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: null
   },
-  profileImageURL: {
+  profileImageFileName: {
     type: String,
-    default: ''
+    default: 'default-avatar.png'
   },
   createdAt: {
     type: Date,
     default: Date.now
   }
+},
+{
+  toObject: { virtuals: true },
+  toJSON: { virtuals: true }
 });
 
 /**
@@ -68,6 +73,10 @@ UserSchema.pre('save', function(next) {
     && !common.isNullOrEmpty(this.get('lastName'))
     && !common.isNullOrEmpty(this.get('emailAddress'));
   next();
+});
+
+UserSchema.virtual('profileImageUrl').get(function() {
+  return `${config.profileImageDirectoryUrl}/${this.profileImageFileName}`;
 });
 
 /**
