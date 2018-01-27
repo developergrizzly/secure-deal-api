@@ -31,7 +31,8 @@ function login(req, res, next) {
     let token = jwt.sign(user, config.jwtSecret);
     return res.json({
       message: "Login successfully",
-      token: token
+      token: token,
+      _id: user._id
     });
   });
 }
@@ -53,15 +54,17 @@ function loginWithFacebook(req, res, next) {
       let token = jwt.sign(foundUser, config.jwtSecret);
       return res.json({
         message: "Login successfully",
-        token: token
+        token: token,
+        _id: foundUser._id
       });
     } else {
-      user.save()
+      return user.save()
       .then((savedUser) => {
         let token = jwt.sign(savedUser, config.jwtSecret);
         return res.json({
           message: "Login successfully",
-          token: token
+          token: token,
+          _id: savedUser._id
         });
       })
     }
@@ -86,15 +89,17 @@ function loginWithGoogle(req, res, next) {
         let token = jwt.sign(foundUser, config.jwtSecret);
         return res.json({
           message: "Login successfully",
-          token: token
+          token: token,
+          _id: foundUser._id
         });
       } else {
-        user.save()
+        return user.save()
           .then((savedUser) => {
             let token = jwt.sign(savedUser, config.jwtSecret);
             return res.json({
               message: "Login successfully",
-              token: token
+              token: token,
+              _id: savedUser._id
             });
           })
       }
@@ -125,7 +130,7 @@ function register(req, res, next) {
     if(numberOfUser > 0) {
       return next(new APIError('Email address already exists', httpStatus.CONFLICT, true))
     } else {
-      user.save()
+      return user.save()
         .then(savedUser => res.json(savedUser))
         .catch(e => next(e));
     }
