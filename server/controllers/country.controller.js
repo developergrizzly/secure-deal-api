@@ -6,7 +6,11 @@ import User from '../models/country.model';
  */
 function list(req, res, next) {
   User.list()
-    .then(countries => res.json(countries))
+    .then(countries => {
+      res.json({
+        country: countries
+      })
+    })
     .catch(e => next(e));
 }
 
