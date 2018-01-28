@@ -4,6 +4,7 @@ import FileUploader from '../helpers/FileUploader';
 import Config from '../../config/config';
 import Formidable from 'formidable';
 import HttpStatus from 'http-status';
+import APIError from '../helpers/APIError';
 
 /**
  * Get category
@@ -75,15 +76,14 @@ function update(req, res, next) {
             }
             category.categoryName= fields.categoryName;
             category.isActive= fields.isActive;
+            category.updatedAt= Date.now();
             return category.save()
               .then((savedCategory) => {
                 return res.json(savedCategory);
               }).catch((err) => next(err));
           })
         } else {
-          return res.json({
-            message: "Category not found"
-          });
+          return next(new APIError('No such category exists!', HttpStatus.NOT_FOUND));
         }
       }).catch(err => next(err));
   });
