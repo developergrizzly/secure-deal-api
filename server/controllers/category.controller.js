@@ -69,7 +69,9 @@ function update(req, res, next) {
 function list(req, res, next) {
   const { limit = 50, skip = 0 } = req.query;
   return Category.list({ limit, skip })
-    .then(category => res.json(category))
+    .then(category => res.json({
+      categories: category
+    }))
     .catch(e => next(e));
 }
 
