@@ -10,56 +10,18 @@ import config from "../../config/config";
  * User Schema
  */
 const UserSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    default: ''
-  },
-  lastName: {
-    type: String,
-    default: ''
-  },
-  emailAddress: {
-    type: String,
-    default: ''
-  },
-  password: {
-    type: String,
-    default: ''
-  },
-  mobileNumber: {
-    type: String,
-    default: ''
-  },
-  isProfileCompleted: {
-    type: Boolean,
-    default: false
-  },
-  isEmailAddressConfirmed: {
-    type: Boolean,
-    default: false
-  },
-  loginType: {
-    type: String,
-    enum: enums.REGISTER_TYPE,
-    required: true
-  },
-  socialMediaId: {
-    type: String,
-    default: null
-  },
-  profileImageFileName: {
-    type: String,
-    default: 'default-avatar.png'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
-},
-{
-  toObject: { virtuals: true },
-  toJSON: { virtuals: true }
-});
+  firstName: {type: String, default: ''},
+  lastName: {type: String, default: ''},
+  emailAddress: {type: String, default: ''},
+  password: {type: String, default: ''},
+  mobileNumber: {type: String, default: ''},
+  isProfileCompleted: {type: Boolean, default: false},
+  isEmailAddressConfirmed: {type: Boolean, default: false},
+  loginType: {type: String, enum: enums.REGISTER_TYPE, required: true},
+  socialMediaId: {type: String, default: null},
+  profileImageFileName: {type: String, default: 'default-avatar.png'},
+  createdAt: {type: Date, default: Date.now}
+}, {toObject: {virtuals: true}, toJSON: {virtuals: true}});
 
 /**
  * Add your

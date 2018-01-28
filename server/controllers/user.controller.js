@@ -1,7 +1,8 @@
 import User from '../models/user.model';
-import FileUploder from '../helpers/FileUploader';
+import FileUploader from '../helpers/FileUploader';
 import Config from '../../config/config';
 import Formidable from 'formidable';
+import HttpStatus from 'http-status';
 
 /**
  * Load user and append to req.
@@ -9,7 +10,7 @@ import Formidable from 'formidable';
 function load(req, res, next, id) {
   User.get(id)
     .then((user) => {
-      req.user = user; // eslint-disable-line no-param-reassign
+      req.user = user;
       return next();
     })
     .catch(e => next(e));
@@ -25,7 +26,10 @@ function get(req, res) {
 
 /**
  * Create new user
- * @property {string} req.body.username - The username of user.
+ * @property {string} req.body.firstName - The firstName of user.
+ * @property {string} req.body.lastName - The lastName of user.
+ * @property {string} req.body.emailAddress - The email address of user.
+ * @property {string} req.body.password - The password of user.
  * @property {string} req.body.mobileNumber - The mobileNumber of user.
  * @returns {User}
  */
@@ -45,14 +49,18 @@ function create(req, res, next) {
 
 /**
  * Update existing user
- * @property {string} req.body.username - The username of user.
+ * @property {string} req.body.firstName - The firstName of user.
+ * @property {string} req.body.lastName - The lastName of user.
+ * @property {string} req.body.emailAddress - The email address of user.
  * @property {string} req.body.mobileNumber - The mobileNumber of user.
  * @returns {User}
  */
 function update(req, res, next) {
   const user = req.user;
-  user.username = req.body.username;
-  user.mobileNumber = req.body.mobileNumber;
+  user.firstName = req.body.username;
+  user.lastName = req.body.lastName;
+  user.emailAddress = req.body.lastName;
+  user.mobileNumber = req.body.lastName;
 
   user.save()
     .then(savedUser => res.json(savedUser))
@@ -92,9 +100,14 @@ function uploadUserProfileImage(req, res, next) {
     fileId = req.params.userId,
     form = new Formidable.IncomingForm();
   form.parse(req, function (err, fields, files) {
-    FileUploder.upload(files, destinationPath, fileId)
+    if(!files || !files.file) {
+      return res.status(HttpStatus.BAD_REQUEST).json({
+        message : 'File is required'
+      });
+    }
+    FileUploader.upload(files, destinationPath, fileId)
       .then(function (result) {
-        return User.findById(req.params.userId)
+        return User.findByIdAndUpdate(req.params.userId)
           .then((user)=>{
             user.profileImageFileName= result.fileName;
             return user.save()

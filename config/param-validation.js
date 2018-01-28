@@ -26,20 +26,36 @@ export default {
   // POST /api/auth/login
   login: {
     body: {
-      emailAddress: Joi.string().email().required(),
-      password: Joi.string().required()
+      emailAddress: Joi.string()
+        .email()
+        .required()
+        .label('Email address'),
+      password: Joi.string()
+        .required()
+        .label('Password'),
     }
   },
 
   // POST /api/auth/register
   register: {
     body: {
-      firstName: Joi.string(),
-      lastName: Joi.string(),
-      emailAddress: Joi.string().email(),
-      mobileNumber: Joi.string(),
-      password: Joi.string(),
+      firstName: Joi.string()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
+        .label('First name'),
+      lastName: Joi.string()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
+        .label('Last name'),
+      emailAddress: Joi.string().email()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
+        .label('Email address'),
+      mobileNumber: Joi.string()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
+        .description('Mobile number'),
+      password: Joi.string()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
+        .label('Pass word'),
       loginType: Joi.string().required()
+        .label('Login type'),
     }
   }
 };
