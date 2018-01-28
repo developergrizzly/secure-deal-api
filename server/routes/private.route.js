@@ -1,5 +1,6 @@
 import express from 'express';
 import userRoutes from './user.route';
+import categoryRoutes from './category.route';
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -10,5 +11,7 @@ router.get('/health-check', (req, res) =>
 
 // mount user routes at /users
 router.use('/users', userRoutes);
+// mount category routes at /category
+router.use('/category', categoryRoutes);
 
 export default router;

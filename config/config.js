@@ -28,7 +28,9 @@ const envVarsSchema = Joi.object({
   FTP_USERNAME: Joi.string().required(),
   FTP_PASSWORD: Joi.string().required(),
   FTP_USER_PROFILE_PIC_PATH: Joi.string().required(),
-  PROFILE_IMAGE_DIRECTORY_URL: Joi.string().required()
+  PROFILE_IMAGE_DIRECTORY_URL: Joi.string().required(),
+  FTP_CATEGORY_PIC_PATH: Joi.string().required(),
+  CATEGORY_IMAGE_DIRECTORY_URL: Joi.string().required()
 }).unknown()
   .required();
 
@@ -53,9 +55,11 @@ const config = {
     password: envVars.FTP_PASSWORD
   },
   ftpPath: {
-    userProfileImage: envVars.FTP_USER_PROFILE_PIC_PATH
+    userProfileImage: envVars.FTP_USER_PROFILE_PIC_PATH,
+    categoryImagePath: envVars.FTP_CATEGORY_PIC_PATH
   },
-  profileImageDirectoryUrl : envVars.PROFILE_IMAGE_DIRECTORY_URL
+  profileImageDirectoryUrl : envVars.PROFILE_IMAGE_DIRECTORY_URL,
+  categoryImageDirectoryUrl: envVars.CATEGORY_IMAGE_DIRECTORY_URL
 };
 
 export default config;
