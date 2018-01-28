@@ -2,4 +2,12 @@ let REGISTER_TYPE= [
   'MANUAL','FACEBOOK', 'GOOGLE'
 ];
 
-export default { REGISTER_TYPE };
+let USER_TYPE= [
+  'CUSTOMER', 'VENDOR', 'EMPLOYEE', 'ADMIN'
+];
+
+let DEVICE_TYPE= [
+  'WEB' ,'ANDROID', 'IPHONE'
+];
+
+export default { REGISTER_TYPE, USER_TYPE, DEVICE_TYPE };

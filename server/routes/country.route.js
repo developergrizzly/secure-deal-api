@@ -4,6 +4,8 @@ import express from "express";
 const router = express.Router();
 
 router.route('/')
-  .get(countryCtrl.list);
-
+  // GET /country - get all country
+  .get(countryCtrl.list)
+  // POST /country - create country
+  .post(countryCtrl.create);
 export default router;

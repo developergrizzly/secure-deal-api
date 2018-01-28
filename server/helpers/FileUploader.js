@@ -11,12 +11,18 @@ import Path from 'path';
  * @param fileId - it will set as file name on server
  */
 function upload(files, destinationPath, fileId) {
-  let sourcePath = files.file.path,
-    fileExtension = files.file.name.split('.').pop(),
-    newFileName = `${fileId}.${fileExtension}`,
-    tempPath = Path.join(`${__basedir}/.temp/${newFileName}`);
-  destinationPath = `${destinationPath}/${fileId}.${fileExtension}`;
   return new Promise((resolve, reject) => {
+    if(!files || !files.file || !files.file.path) {
+      resolve({
+        isSucceeded: false,
+        isFileExists: false
+      });
+    }
+    let sourcePath = files.file.path,
+      fileExtension = files.file.name.split('.').pop(),
+      newFileName = `${fileId}.${fileExtension}`,
+      tempPath = Path.join(`${__basedir}/.temp/${newFileName}`);
+    destinationPath = `${destinationPath}/${fileId}.${fileExtension}`;
     readFile(sourcePath)
       .then((data) => {
         return writeTempFile(tempPath, data);
@@ -27,6 +33,7 @@ function upload(files, destinationPath, fileId) {
     }).then((result) => {
       resolve({
         isSucceeded: result === true,
+        isFileExists: true,
         fileName: newFileName
       });
     }).catch(err => reject(err));
