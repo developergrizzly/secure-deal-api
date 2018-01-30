@@ -1,6 +1,8 @@
 import express from 'express';
 import authRoutes from './auth.route';
 import countryRoutes from './country.route';
+import stateRoutes from './state.route';
+import cityRoutes from './city.route';
 import FileSystem from 'fs';
 
 const router = express.Router();
@@ -24,7 +26,13 @@ router.get('/access-log', (req, res) => {
 // mount auth routes at /auth
 router.use('/auth', authRoutes);
 
-// mount auth routes at /country
+// mount country routes at /country
 router.use('/country', countryRoutes);
+
+// mount state routes at /state
+router.use('/state', stateRoutes);
+
+// mount city routes at /city
+router.use('/city', cityRoutes);
 
 export default router;
