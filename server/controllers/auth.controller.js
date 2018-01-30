@@ -28,7 +28,7 @@ function login(req, res, next) {
     if(!bcrypt.compareSync(loginCredentials.password, user.password)) {
       return next(new APIError('Wrong password', httpStatus.UNAUTHORIZED, true));
     }
-    let token = jwt.sign(user, config.jwtSecret);
+    let token = jwt.sign({_id:user._id}, config.jwtSecret);
     return res.json({
       message: "Login successfully",
       token: token,
@@ -51,7 +51,7 @@ function loginWithFacebook(req, res, next) {
   }).exec()
   .then((foundUser) => {
     if(foundUser) {
-      let token = jwt.sign(foundUser, config.jwtSecret);
+      let token = jwt.sign({_id:foundUser._id}, config.jwtSecret);
       return res.json({
         message: "Login successfully",
         token: token,
@@ -60,7 +60,7 @@ function loginWithFacebook(req, res, next) {
     } else {
       return user.save()
       .then((savedUser) => {
-        let token = jwt.sign(savedUser, config.jwtSecret);
+        let token = jwt.sign({_id:savedUser._id}, config.jwtSecret);
         return res.json({
           message: "Login successfully",
           token: token,
@@ -86,7 +86,7 @@ function loginWithGoogle(req, res, next) {
   }).exec()
     .then((foundUser) => {
       if(foundUser) {
-        let token = jwt.sign(foundUser, config.jwtSecret);
+        let token = jwt.sign({_id:foundUser._id}, config.jwtSecret);
         return res.json({
           message: "Login successfully",
           token: token,
@@ -95,7 +95,7 @@ function loginWithGoogle(req, res, next) {
       } else {
         return user.save()
           .then((savedUser) => {
-            let token = jwt.sign(savedUser, config.jwtSecret);
+            let token = jwt.sign({_id:savedUser._id}, config.jwtSecret);
             return res.json({
               message: "Login successfully",
               token: token,
@@ -120,7 +120,8 @@ function register(req, res, next) {
     emailAddress: req.body.emailAddress,
     password: bcrypt.hashSync(req.body.password, null, null),
     mobileNumber: req.body.mobileNumber,
-    loginType: req.body.loginType
+    loginType: req.body.loginType,
+    country: req.body.country
   });
 
   User.count({

@@ -53,9 +53,11 @@ export default {
         .description('Mobile number'),
       password: Joi.string()
         .when('loginType', { is: 'MANUAL', then: Joi.required() })
-        .label('Pass word'),
+        .label('Password'),
       loginType: Joi.string().required()
         .label('Login type'),
+      country: Joi.string()
+        .when('loginType', { is: 'MANUAL', then: Joi.required() })
     }
   }
 };
