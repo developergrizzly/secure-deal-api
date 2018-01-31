@@ -1,6 +1,7 @@
 import express from 'express';
 import userRoutes from './user.route';
 import categoryRoutes from './category.route';
+import productCatalogue from './product-catalogue.route';
 import config from '../../config/config';
 import jwt from 'jsonwebtoken';
 
@@ -28,5 +29,7 @@ router.get('/health-check', (req, res) =>
 router.use('/users', userRoutes);
 // mount category routes at /category
 router.use('/category', categoryRoutes);
+// mount product catelouge routes at /productcatalogue
+router.use('/productcatalogue', productCatalogue);
 
 export default router;

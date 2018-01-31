@@ -39,7 +39,11 @@ function create(req, res, next) {
     lastName: req.body.lastName,
     emailAddress: req.body.emailAddress,
     password: req.body.password,
-    mobileNumber: req.body.mobileNumber
+    mobileNumber: req.body.mobileNumber,
+    userType: req.body.userType,
+    vendorName: req.body.vendorName,
+    loginType: req.body.loginType,
+    country: req.body.country
   });
 
   user.save()
