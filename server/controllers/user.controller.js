@@ -60,15 +60,15 @@ function create(req, res, next) {
  * @returns {User}
  */
 function update(req, res, next) {
-  const user = req.user;
-  user.firstName = req.body.username;
-  user.lastName = req.body.lastName;
-  user.emailAddress = req.body.lastName;
-  user.mobileNumber = req.body.lastName;
-
-  user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
+  delete req.body.password;
+  let user=req.body;
+  return User.update({_id: req.params.userId}, user)
+    .then((result) => {
+        return User.findById(req.params.userId)
+          .then(user => res.json(user))
+          .catch(err => next(err));
+    })
+    .catch(err => next(err));
 }
 
 /**
