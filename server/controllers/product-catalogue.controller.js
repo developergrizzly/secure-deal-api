@@ -40,7 +40,7 @@ function create(req, res, next) {
             .then((savedProductCatelouge) => res.json(savedProductCatelouge))
             .catch((err) => next(err));
         } else {
-          return next(new APIError('Failed to create product catelouge due file uploading Failed',
+          return next(new APIError('Failed to create product catelouge due to file uploading Failed',
             HttpStatus.INTRRNAL_SERVER_ERROR))
         }
       });

@@ -2,6 +2,7 @@ import express from 'express';
 import userRoutes from './user.route';
 import categoryRoutes from './category.route';
 import productCatalogue from './product-catalogue.route';
+import product from './product.route';
 import config from '../../config/config';
 import jwt from 'jsonwebtoken';
 
@@ -31,5 +32,7 @@ router.use('/users', userRoutes);
 router.use('/category', categoryRoutes);
 // mount product catelouge routes at /productcatalogue
 router.use('/productcatalogue', productCatalogue);
+// mount product catelouge routes at /productcatalogue
+router.use('/product', product);
 
 export default router;

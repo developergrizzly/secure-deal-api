@@ -32,7 +32,9 @@ const envVarsSchema = Joi.object({
   FTP_CATEGORY_PIC_PATH: Joi.string().required(),
   CATEGORY_IMAGE_DIRECTORY_URL: Joi.string().required(),
   FTP_PRODUCT_CATALOGUE_COVER_IMAGE_PATH: Joi.string().required(),
-  PRODUCT_CATALOGUE_COVER_IMAGE_URL: Joi.string().required()
+  PRODUCT_CATALOGUE_COVER_IMAGE_URL: Joi.string().required(),
+  FTP_PRODUCT_IMAGE_PATH: Joi.string().required(),
+  PRODUCT_IMAGE_URL: Joi.string().required()
 }).unknown()
   .required();
 
@@ -59,11 +61,13 @@ const config = {
   ftpPath: {
     userProfileImage: envVars.FTP_USER_PROFILE_PIC_PATH,
     categoryImagePath: envVars.FTP_CATEGORY_PIC_PATH,
-    productCatalogueCoverImagePath: envVars.FTP_PRODUCT_CATALOGUE_COVER_IMAGE_PATH
+    productCatalogueCoverImagePath: envVars.FTP_PRODUCT_CATALOGUE_COVER_IMAGE_PATH,
+    productImagePath: envVars.FTP_PRODUCT_IMAGE_PATH,
   },
   profileImageDirectoryUrl : envVars.PROFILE_IMAGE_DIRECTORY_URL,
   categoryImageDirectoryUrl: envVars.CATEGORY_IMAGE_DIRECTORY_URL,
-  productCatalogueCoverImageUrl: envVars.PRODUCT_CATALOGUE_COVER_IMAGE_URL
+  productCatalogueCoverImageUrl: envVars.PRODUCT_CATALOGUE_COVER_IMAGE_URL,
+  productImageUrl: envVars.PRODUCT_IMAGE_URL
 };
 
 export default config;
