@@ -7,7 +7,7 @@ import HttpStatus from 'http-status';
 import APIError from '../helpers/APIError';
 
 function get(req, res, next) {
-  return Product.findById(req.params.id)
+  return Product.findById(req.params.productId)
     .then((product) => res.json(product))
     .catch((err) => next(err));
 }
