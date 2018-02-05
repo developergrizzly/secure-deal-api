@@ -42,7 +42,7 @@ function create(req, res, next){
       categoryName: fields.categoryName
     });
     let fileId= category._id;
-    return FileUploader.upload(files, destinationPath, fileId)
+    return FileUploader.upload(files.file, destinationPath, fileId)
       .then((result) =>{
         category.categoryImageName= result.fileName;
         return category.save()
@@ -69,7 +69,7 @@ function update(req, res, next) {
       .then((category) => {
         if(category) {
           let fileId= category._id;
-          return FileUploader.upload(files, destinationPath, fileId)
+          return FileUploader.upload(files.file, destinationPath, fileId)
           .then(function(result) {
             if(result.isSucceeded && result.isFileExists) {
               category.categoryImageName= result.fileName;

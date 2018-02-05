@@ -10,7 +10,7 @@ import ProductDetail from './product-detail.model';
  */
 const ProductSchema= new mongoose.Schema({
   productCatelouge: {type: mongoose.Schema.Types.ObjectId, ref: 'ProductCatelouge', required: true},
-  productImageFileName: {type: String, required: true},
+  productImageFileNames: [{type: String, required: true}],
   weight: {type: Number, required: true},
   price: {type: Number, required: true},
   stock: {type: Number, required: true},
@@ -39,7 +39,11 @@ ProductSchema.pre('findById',  populateReferences)
    .pre('find', populateReferences);
 
 ProductSchema.virtual('productImageUrl').get(function() {
- return `${config.productImageUrl}/${this.productImageFileName}`;
+  let fileUrls=[];
+  for(let i=0; i<this.productImageFileNames.length; i++) {
+    fileUrls.push(`${config.productImageUrl}/${this.productImageFileNames[i]}`)
+  }
+ return fileUrls;
 });
 
 function populateReferences() {

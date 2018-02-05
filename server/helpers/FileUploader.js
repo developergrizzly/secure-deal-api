@@ -10,16 +10,16 @@ import Path from 'path';
  * @param destinationPath - where to save file n ftp server
  * @param fileId - it will set as file name on server
  */
-function upload(files, destinationPath, fileId) {
+function upload(file, destinationPath, fileId) {
   return new Promise((resolve, reject) => {
-    if(!files || !files.file || !files.file.path) {
+    if(!file || !file.path) {
       resolve({
         isSucceeded: false,
         isFileExists: false
       });
     }
-    let sourcePath = files.file.path,
-      fileExtension = files.file.name.split('.').pop(),
+    let sourcePath = file.path,
+      fileExtension = file.name.split('.').pop(),
       newFileName = `${fileId}.${fileExtension}`,
       tempPath = Path.join(`${__basedir}/.temp/${newFileName}`);
     destinationPath = `${destinationPath}/${fileId}.${fileExtension}`;

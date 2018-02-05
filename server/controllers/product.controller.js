@@ -5,6 +5,7 @@ import Config from '../../config/config';
 import Formidable from 'formidable';
 import HttpStatus from 'http-status';
 import APIError from '../helpers/APIError';
+import Promise from 'bluebird';
 
 function get(req, res, next) {
   return Product.findById(req.params.productId)
@@ -15,6 +16,7 @@ function get(req, res, next) {
 function create(req, res, next) {
   let form = new Formidable.IncomingForm(),
     destinationPath = Config.ftpPath.productImagePath;
+  form.multiples= true;
   form.parse(req, (err, fields, files)=> {
     let product=new Product({
       productCatelouge: fields.productCatelouge,
@@ -24,11 +26,20 @@ function create(req, res, next) {
       SKUnumber: fields.SKUnumber,
       createdBy: req.userId
     });
-    let fileId= product._id;
-    return FileUploader.upload(files, destinationPath, fileId)
-      .then((result) =>{
-        product.productImageFileName= result.fileName;
-        product.save()
+    let filePromise =[], fileNames = [], fileId;
+    for(let i=0; i<files.file.length; i++) {
+      fileId= `${product._id}_${i}`;
+      filePromise.push(FileUploader.upload(files.file[i], destinationPath, fileId)
+        .then((result) =>{
+          fileNames.push(result.fileName);
+        })
+      );
+    }
+
+    return Promise.all(filePromise)
+      .then(() =>{
+        product.productImageFileNames= fileNames;
+        return product.save()
         .then((savedProduct)=> {
           return res.json(savedProduct);
         })

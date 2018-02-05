@@ -32,7 +32,7 @@ function create(req, res, next) {
       description: JSON.parse(fields.description),
       createdBy: req.userId
     });
-    return FileUploader.upload(files, destinationPath, productCatelouge._id)
+    return FileUploader.upload(files.file, destinationPath, productCatelouge._id)
       .then(function (result) {
         if(result.isSucceeded && result.isFileExists) {
           productCatelouge.catelougeImageFileName= result.fileName;
