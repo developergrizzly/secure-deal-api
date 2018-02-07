@@ -3,6 +3,7 @@ import userRoutes from './user.route';
 import categoryRoutes from './category.route';
 import productCatalogue from './product-catalogue.route';
 import product from './product.route';
+import deliveryAddress from './delivery-address.route';
 import config from '../../config/config';
 import jwt from 'jsonwebtoken';
 
@@ -34,5 +35,7 @@ router.use('/category', categoryRoutes);
 router.use('/productcatalogue', productCatalogue);
 // mount product catelouge routes at /productcatalogue
 router.use('/product', product);
+// mount delivery address routes at /deliveryaddress
+router.use('/delivery-address', deliveryAddress);
 
 export default router;
